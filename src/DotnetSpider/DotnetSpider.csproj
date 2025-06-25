@@ -10,6 +10,10 @@
 
   <ItemGroup>
     <PackageReference Include="Bert.RateLimiters" Version="1.0.15" />
+    <PackageReference Include="BouncyCastle.Cryptography" Version="2.6.1" />
+    <PackageReference Include="FreeSql.Cloud" Version="2.0.1" />
+    <PackageReference Include="FreeSql.DbContext" Version="3.5.209" />
+    <PackageReference Include="Mapster" Version="7.4.0" />
     <PackageReference Include="MessagePack" Version="2.5.140" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
@@ -20,6 +24,7 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
     <PackageReference Include="System.Text.Json" Version="8.0.3" />
     <PackageReference Include="System.Threading.Channels" Version="8.0.0" />
+    <PackageReference Include="Yitter.IdGenerator" Version="1.0.14" />
     <PackageReference Include="ZCJ.HashedWheelTimer" Version="0.10.2" />
     <PackageReference Include="murmurhash" Version="1.0.3" />
   </ItemGroup>

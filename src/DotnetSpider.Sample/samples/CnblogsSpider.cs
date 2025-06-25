@@ -34,7 +34,7 @@ public class CnBlogsSpider(
     {
         AddDataFlow<ListNewsParser>();
         AddDataFlow<NewsParser>();
-        // AddDataFlow(GetDefaultStorage);
+        AddDataFlow(GetDefaultStorage);
         var request = new Request("https://news.cnblogs.com/n/page/1");
         request.Headers.UserAgent = "";
         await AddRequestsAsync(request);
