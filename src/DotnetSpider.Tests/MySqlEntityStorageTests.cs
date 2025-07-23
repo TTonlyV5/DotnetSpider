@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Dapper;
 using DotnetSpider.DataFlow;
 using DotnetSpider.DataFlow.Storage.Entity;
+using DotnetSpider.DataFlow.Storage.FreeSql;
 using DotnetSpider.Http;
 using DotnetSpider.MySql;
 using MySqlConnector;

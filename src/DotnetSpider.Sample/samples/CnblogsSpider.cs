@@ -1,9 +1,13 @@
 using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using DotnetSpider.DataFlow;
 using DotnetSpider.DataFlow.Parser;
+using DotnetSpider.DataFlow.Parser.Formatters;
+using DotnetSpider.DataFlow.Storage.Entity;
+using DotnetSpider.DataFlow.Storage.FreeSql.Entities;
 using DotnetSpider.Http;
 using DotnetSpider.Selector;
 using Microsoft.Extensions.Hosting;
@@ -34,6 +38,7 @@ public class CnBlogsSpider(
     {
         AddDataFlow<ListNewsParser>();
         AddDataFlow<NewsParser>();
+        //AddDataFlow<DataParserWithOrm<CnblogsEntry2, long>>();
         AddDataFlow(GetDefaultStorage);
         var request = new Request("https://news.cnblogs.com/n/page/1");
         request.Headers.UserAgent = "";
@@ -70,6 +75,7 @@ public class CnBlogsSpider(
 
                     context.AddFollowRequests(request);
                 }
+                break;
             }
 
             return Task.CompletedTask;
@@ -107,12 +113,37 @@ public class CnBlogsSpider(
         }
     }
 
-    protected class News
+    protected class News : EntityBase
     {
         public string Title { get; set; }
         public string Url { get; set; }
         public string Summary { get; set; }
         public int Views { get; set; }
         public string Content { get; set; }
+    }
+
+    [Schema("cnblogs", "news")]
+    [EntitySelector(Expression = ".//div[@class='news_block']", Type = SelectorType.XPath)]
+    [GlobalValueSelector(Expression = ".//a[@class='current']", Name = "类别", Type = SelectorType.XPath)]
+    [GlobalValueSelector(Expression = "//title", Name = "Title", Type = SelectorType.XPath)]
+    [FollowRequestSelector(Expressions = ["//div[@class='pager']"])]
+    public class CnblogsEntry2 : EntityBase
+    {
+        [StringLength(40)]
+        [ValueSelector(Expression = "GUID", Type = SelectorType.Environment)]
+        public string Guid { get; set; }
+
+        [ValueSelector(Expression = ".//h2[@class='news_entry']/a")]
+        public string News { get; set; }
+
+        [ValueSelector(Expression = ".//h2[@class='news_entry']/a/@href")]
+        public string Url { get; set; }
+
+        [ValueSelector(Expression = ".//div[@class='entry_summary']")]
+        [TrimFormatter]
+        public string PlainText { get; set; }
+
+        [ValueSelector(Expression = "DATETIME", Type = SelectorType.Environment)]
+        public DateTime CreationTime { get; set; }
     }
 }
